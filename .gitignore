@@ -1,1 +1,3 @@
-*.vscode
+# files from VSC
+.vscode
+.json
