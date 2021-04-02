@@ -8,7 +8,7 @@ def transmision(listofbits, p):
     for list in listofbits:
         for numbers in list:
             temp = random.randint(1000)
-            if temp > p*1000: # w zależnosci od wartosci parametru prawdopodobienstwa
+            if temp >= p*1000: # w zależnosci od wartosci parametru prawdopodobienstwa
                 if numbers == 0:
                     listofbits[i][j] = 1
                 else:
