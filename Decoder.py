@@ -8,13 +8,16 @@ def decodeBit(listofbits, n):
     listOfErrorPackage = [] # 0 - dobrze, 1 - źle
     countonebit = 0
 
+    temp = 0
     for list in listofbits:
         countonebit = 0
         counter = 0
+        temp += 1
         for numbers in list:
             if numbers == 1:
                 countonebit += 1
             counter += 1
+            
             # print("counter: " + str(counter))
             if counter == n:
                 # print("List: " + str(list[n]))
@@ -26,6 +29,7 @@ def decodeBit(listofbits, n):
                     listOfErrorPackage.append(1)
                     print("@")
                 break
-            # if counter == lastElem && :
+            if counter == lastElem and len(listofbits)-lastElem == temp*n:
+                print("!!!!!")
     print("KONIEC")
     print(listOfErrorPackage)
