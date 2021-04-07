@@ -1,7 +1,14 @@
-from Generator import generateBit
+
 from Coder import coderBit
 from TransmisionCannal import transmision
 from Decoder import decodeBit
+
+from Sender import Sender
+from Receiver import Receiver
+
+receiver = Receiver()
+sender = Sender(receiver)
+receiver.setSender(sender)
 
 def main():
     bits = []

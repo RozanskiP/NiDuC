@@ -1,26 +1,23 @@
-
+from Generator import generateBit
+from Receiver import Receiver
 
 
 class Sender:
+    receiver = None
+    Window = 10
 
-    def __init__(self):
-        pass
-
-    def sendFrameStopAndWait(self):
-        pass
-
-    def sendFrameGoBackN(self):
+    def __init__(self, receiver):
+        # generoweane danych rand, pozniej przerobic na wczytanie zdjecia ReadFromFile.py
+        generateBit(bits, 25)
         pass
 
-    def sendFrameSelectiveReapeat(self): 
+    def sendFrameStopAndWait(self): # wysylanie ramki za pomoca algorytmu stop and wait
         pass
 
-    def addCodeParity(self):
-        pass
-    
-    def addCodeMirrosing(self):
+    def sendFrameGoBackN(self): # wysylanie ramki za pomoca algorytmu go back n
         pass
 
-    def addCodeCRC(self):
+    def sendFrameSelectiveReapeat(self): # wysylanie ramki za pomoca algorytmu selevtive reapeat
         pass
+
     
