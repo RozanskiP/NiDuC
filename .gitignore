@@ -1,3 +1,6 @@
 # files from VSC
 .vscode
 .json
+
+_pychache_
+.mypy_cache
