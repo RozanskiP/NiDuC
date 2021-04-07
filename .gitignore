@@ -2,5 +2,5 @@
 .vscode
 .json
 
-_pychache_
+__pycache__
 .mypy_cache
