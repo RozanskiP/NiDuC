@@ -1,3 +1,0 @@
-
-def readFromFile():
-    pass
