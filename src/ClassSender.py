@@ -16,11 +16,18 @@ class Sender:
     def sendFrameStopAndWait(self, data): # wysylanie ramki za pomoca algorytmu stop and wait
         print("Algorytm: sendFrameStopAndWait")
         
-        print(data)
-        self.addCodeMirroring(data)
-        print(data)
 
+        # maja byc pojedyncze ramki
+        if self.typeOfCode == 1:
+            self.addCodeParity(data)
 
+        if self.typeOfCode == 2:
+            self.addCodeMirroring(data)
+
+        if self.typeOfCode == 3: 
+            self.addCodeCRC(data)
+
+        print(data)
         # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
 
         # sizeOfFrames
