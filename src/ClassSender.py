@@ -1,4 +1,5 @@
 from Generator import generateBit
+import zlib # kod CRC32
 
 class Sender:
     receiver = None
@@ -15,9 +16,12 @@ class Sender:
     def sendFrameStopAndWait(self, data): # wysylanie ramki za pomoca algorytmu stop and wait
         print("Algorytm: sendFrameStopAndWait")
         
-        
+        print(data)
+        self.addCodeMirroring(data)
+        print(data)
 
-        # pogrupuj w ramki i dodaj kod parzystosci
+
+        # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
 
         # sizeOfFrames
 
@@ -39,11 +43,33 @@ class Sender:
         print("Algorytm: sendFrameSelectiveRepeat")
         pass
 
-    def addCodeParity(self, frame): # Kod parzystosci 
-        pass
+    def addCodeParity(self, frame): # Kod parzystosci
+        print("KOD PARZYSTOSCI!")
+
+        countonebit = 0
+        for bit in frame:
+            if bit == 1:
+                countonebit += 1
+        if countonebit % 2 == 0:
+            frame.append(0)
+        else:
+            frame.append(1)
     
     def addCodeMirroring(self, frame): # Kod dublowania
+        print("KOD DUBLOWANIA")
+        temp = []
+        for bits in frame:
+            temp.append(bits)
+
+        for bits in temp:
+            frame.append(bits)
+
         pass
 
     def addCodeCRC(self, frame): # Kod CRC
-        pass
+        print("KOD CRC32")
+        string = ' '
+        for bits in frame:
+            string += str(bits)
+        hexs = hex(zlib.crc32(bytes(string, 'utf-8')))
+        frame.append(hexs)
