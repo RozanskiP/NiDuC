@@ -3,10 +3,9 @@ import zlib # kod CRC32
 
 class Sender:
     receiver = None
-    WindowOfWindow = 100
+    WindowOfWindow = 0
     typeOfProtocol = 0
     typeOfCode = 0
-
 
     def __init__(self, receiver):
         # generoweane danych rand, pozniej przerobic na wczytanie zdjecia ReadFromFile.py
@@ -15,7 +14,6 @@ class Sender:
 
     def sendFrameStopAndWait(self, data): # wysylanie ramki za pomoca algorytmu stop and wait
         print("Algorytm: sendFrameStopAndWait")
-        
 
         # maja byc pojedyncze ramki
         if self.typeOfCode == 1:
@@ -37,8 +35,6 @@ class Sender:
         # podanie wartosci do odbieracza
 
         #wysylanie ramek po koleji
-        
-
 
         pass
 
@@ -78,5 +74,13 @@ class Sender:
         string = ' '
         for bits in frame:
             string += str(bits)
-        hexs = hex(zlib.crc32(bytes(string, 'utf-8')))
-        frame.append(hexs)
+        hexs = int(zlib.crc32(bytes(string, 'utf-8')))
+        hexsbin = format(hexs, "b")
+        print(hexsbin)
+        hexsstr = str(hexsbin)
+        listhex = list(hexsstr)
+        listint = []
+        for i in listhex:
+            listint.append(int(i)) 
+        for i in listint:
+            frame.append(i)

@@ -35,7 +35,7 @@ def main():
 
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 4 # do testowania mniejsza ilosc
+    SizeOfData = 100 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
     print(Frames)
 
