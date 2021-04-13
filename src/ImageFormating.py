@@ -1,69 +1,28 @@
 from PIL import Image
-import numpy as np
+import base64
 
-def loadImage(filename):
+def ImgToBitArr(filename):
+    with open(filename, "rb") as img: #read byte
+        hexs = base64.b16encode(img.read()) #hex w byte b`(wartosc)`
+        hexs = hexs.decode("utf-8") #czysta wartosc hex  (wartosc)
+        IntH = int(hexs, 16) #teraz mamy wartość decimal
+        BinH = bin(IntH) #wartosc binarna
+        BinH = BinH.replace('0b', '') #wywalenie z 0b z poczatku ciagu
+        BinList = list(BinH) #lista
+        return BinList
+
+def BitArrToImg(FileToWrite,bArr):
+    BitString = "".join(bArr)
+    img = hex(int(BitString, 2)) #odrazu do hexa
+    img = img.replace('0x','') #usniecie 0x z 0x(wartosc)
+    img = img.upper() #aby base64.b16decode dzialal musza byc duze
+    img = img.encode("utf-8") #trzeba zrobic z tego byte object
+    img = base64.b16decode(img) #zakodowanie zdjecia
+    File = open(FileToWrite, "wb")
+    File.write(img)
+    File.close()
+
+def TestImages(filename):
     image = Image.open(filename)
-    image.show()
-    return image
-
-# wyświetlenie orginalnego zdjęcia
-def displayOriginalImage(image):
-    print("Display: ")
-    array = numpy.array(image)
-    Flattenarray = array.flatten('C')
-    binarray = []
-    imagenew = Image.fromarray(Flattenarray)
-    
-    print("Array: ")
-    for list in Flattenarray:
-        binarray.append(format(list, "b"))
-    print(Flattenarray.size)
-    # for list2 in binarray:
-    #     print(binarray)
-    print(Flattenarray[0])
-    print(binarray[0])
-    i = 0
-    for list2 in binarray[0]:
-        print(list2)
-        i += 1
-    print("SIZE: ", i)
-
-    intt = 100
-    print(format(intt, "b"))
-
-    pass
-
-def displayImageBeforeTransmision():
-    pass
-
-def formatArray():
-    pass
-
-def formatFramesWithCode():
-    pass
-
-def main():
-    # image = loadImage("../pies.jpg") # ../pies.jpg
-    # displayOriginalImage(image)
-
-    img = Image.open('../pies.jpg')
-    ary = np.array(img)
-
-    # Split the three channels
-    r,g,b = np.split(ary,3,axis=2)
-    r=r.reshape(-1)
-    g=r.reshape(-1)
-    b=r.reshape(-1)
-
-    # Standard RGB to grayscale 
-    bitmap = list(map(lambda x: 0.299*x[0]+0.587*x[1]+0.114*x[2], 
-    zip(r,g,b)))
-    bitmap = np.array(bitmap).reshape([ary.shape[0], ary.shape[1]])
-    bitmap = np.dot((bitmap > 128).astype(float),255)
-    im = Image.fromarray(bitmap.astype(np.uint8))
-    im.save('pies2.jpg')
-
-    pass
-
-if __name__ == "__main__":
-    main()
+    print(ImgToBitArr(filename))
+    BitArrToImg("Result.png",ImgToBitArr(filename))
