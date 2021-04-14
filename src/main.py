@@ -1,5 +1,6 @@
 from ClassSender import Sender
 from ClassReceiver import Receiver
+from MasterList import MasterList
 
 from Coder import coderBit
 from TransmisionCannal import transmision
@@ -12,8 +13,8 @@ def main():
     receiver.setSender(sender)
 
     print("Program do analizy alogorytmu ARQ")
-    sender.SizeOfWindow = int(input("Podaj wielkosc ramki: "))
-    print("Size: ", sender.SizeOfWindow )
+    SizeOfWindow = int(input("Podaj wielkosc ramki: "))
+    print("Size: ", SizeOfWindow )
 
 
     print("Podaj typ protokołu do przesyłania danych: ")
@@ -35,21 +36,29 @@ def main():
 
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 100 # do testowania mniejsza ilosc
+    SizeOfData = 40 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
-    print(Frames)
 
+    # zainicjalozowanie wartossci do glownego zbiornika na dane
+    BER = 0
+    E = 0
+    propability = 0
+
+    masterlist = MasterList(Frames, BER, E, SizeOfWindow, chosenProtocol, chosenCode, propability)
+
+    receiver.SizeOfWindow = SizeOfWindow
+    sender.SizeOfWindow = SizeOfWindow
 
     if chosenProtocol == 1:
-        sender.sendFrameStopAndWait(Frames)
+        sender.sendFrameStopAndWait(masterlist)
         
 
     if chosenProtocol == 2:
-        sender.sendFrameGoBackN(Frames)
+        sender.sendFrameGoBackN(masterlist)
 
 
     if chosenProtocol == 3:
-        sender.sendFrameSelectiveRepeat(Frames)
+        sender.sendFrameSelectiveRepeat(masterlist)
 
 
     # Szybkie testowanie 

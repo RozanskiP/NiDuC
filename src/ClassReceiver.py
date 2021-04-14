@@ -2,6 +2,7 @@
 
 class Receiver:
     sender = None
+    SizeOfWindow = 0
     typeOfProtocol = 0
     typeOfCode = 0
     
@@ -25,7 +26,7 @@ class Receiver:
         # odpowiedznie czy ma byc ponowiona czy jest zaakceptowana 
 
 
-
+        return false
         pass
 
     def receiverFrameGoBackN(self, frame): # odebranie dla algorytmu go back n
@@ -35,10 +36,33 @@ class Receiver:
         pass
 
     def CodeParity(self, frame): # oblicza jaki jest kod bledu ktory dotarl
-        pass
+        countonebit = 0
+        AddedCode = []
+        for bit in frame:
+            if bit == 1:
+                countonebit += 1
+        if countonebit % 2 == 0:
+            AddedCode.append(0)
+        else:
+            AddedCode.append(1)
+        return AddedCode
     
     def CodeMirroring(self, frame): # oblicza jaki jest kod bledu ktory dotarl
-        pass
+        AddedCode = []
+        for bits in frame:
+            AddedCode.append(bits)
+        return AddedCode
 
     def CodeCRC(self, frame): # oblicza jaki jest kod bledu ktory dotarl
-        pass
+        string = ' '
+        for bits in frame:
+            string += str(bits)
+        hexs = int(zlib.crc32(bytes(string, 'utf-8')))
+        hexsbin = format(hexs, "b")
+        print(hexsbin)
+        hexsstr = str(hexsbin)
+        listhex = list(hexsstr)
+        AddedCode = []
+        for i in listhex:
+            AddedCode.append(int(i)) 
+        return AddedCode
