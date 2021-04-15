@@ -4,7 +4,14 @@ from MasterList import MasterList
 
 from Generator import generateBit
 
-def main():
+from ImageFormating import ImgToBitArr
+from ImageFormating import BitArrToImg
+from ImageFormating import ShowResultImage
+from Plotter import ShowPlot
+
+DataList = []
+
+def main(Protocol_ID ,Code_ID, Probability ,Photo):
     receiver = Receiver()
     sender = Sender(receiver)
     receiver.setSender(sender)
@@ -32,6 +39,12 @@ def main():
     chosenProtocol = 3
     chosenCode = 1
     propability = 0.90
+    chosenProtocol = Protocol_ID
+    chosenCode = Code_ID
+
+    # ProbabilityList = [1.0, 0.99 , 0.95 , 0.90]
+    # propability = ProbabilityList[Probability]
+    #propability = 0.90
 
     receiver.typeOfCode = chosenCode
     receiver.typeOfProtocol = chosenProtocol
@@ -43,6 +56,17 @@ def main():
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
     SizeOfData = 100 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
+    SizeOfData = 1000 # do testowania mniejsza ilosc
+
+    #mozna by wywalic if i elif jesli generacje bitów byłaby przed main()
+    #a sama lista bitów wchodziła do maina(BitList, Protocol_ID ,Code_ID, Probability ,Photo) jako argument
+    #wtedy tez wybór zdjecia byłby przed mainem a nie w mainie ale to chyba nie robi roznicy
+    #komentarze usunac po zrobienniu decyzji
+    # if Photo == 0:
+    #     generateBit(Frames, SizeOfData)
+
+    # elif Photo == 1:
+    #     Frames = ImgToBitArr(r"FLAGA.jpg")
 
     # zainicjalozowanie wartosci do glownego zbiornika na dane
     BER = 0
@@ -65,7 +89,11 @@ def main():
     if chosenProtocol == 3:
         sender.sendFrameSelectiveRepeat(masterlist)
 
+    if Photo == 0:
+        DataList.append(masterlist) 
 
+    elif Photo == 1:
+        BitArrToImg("Result.jpg", masterlist.data)
     # Szybkie testowanie 
     # Frames = []
     # SizeOfData = 4
@@ -83,4 +111,17 @@ def main():
     # decodeBit(listofbits, n)
 
 if __name__ == "__main__":
-    main()
+    main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
+    for pr in range(1,4): #protokół
+        for c in range(1,4): #Kod
+            for p in range(2):#Prawdopodobienstwo
+               #main(pr,c,p,0)
+               pass
+    #main(1,3,3,1) #Mielenie zdjecia
+    #ShowResultImage() #Pokazanie zdjecia po "Mielonce"
+
+    ShowPlot(DataList)  #!!!! odpalac tylko jesli main jest W forach lub jest pojedynczy
+
+    #powstaje error przy gaszeniu okna z wykresami bo niby jak okno sie odpali z innego modułu niż tym gdzie jest __main__ (chyba)
+    #Fix przyjdzie szybko
+    

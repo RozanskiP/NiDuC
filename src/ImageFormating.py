@@ -8,14 +8,14 @@ def ImgToBitArr(filename):
         IntH = int(hexs, 16) #teraz mamy wartość decimal
         BinH = bin(IntH) #wartosc binarna
         BinH = BinH.replace('0b', '') #wywalenie z 0b z poczatku ciagu
-        BinList = list(BinH) #lista
-        BinList = list(map(int, BinList))
+        BinList = list(BinH) #Stworzenie listy z ciagu bitów jest to lista stringów
+        BinList = list(map(int, BinList)) #zmiana na liste intów
         return BinList
 
 def BitArrToImg(FileToWrite,bArr):
-    bArr = list(map(str, bArr))
-    BitString = "".join(bArr)
-    img = hex(int(BitString, 2)) #odrazu do hexa
+    bArr = list(map(str, bArr)) #zmiana na liste stringów
+    BitString = "".join(bArr) #zmiana listy na jeden ciag znaków
+    img = hex(int(BitString, 2)) #ciag binarny do hexa
     img = img.replace('0x','') #usniecie 0x z 0x(wartosc)
     img = img.upper() #aby base64.b16decode dzialal musza byc duze
     img = img.encode("utf-8") #trzeba zrobic z tego byte object
@@ -26,3 +26,7 @@ def BitArrToImg(FileToWrite,bArr):
 
 def TestImages(filename):
     BitArrToImg("Result.jpg",ImgToBitArr(filename))
+
+def ShowResultImage():
+    image = Image.open("Result.jpg")
+    image.show()
