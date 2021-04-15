@@ -45,7 +45,6 @@ class Sender:
                     masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
                     break
                 masterlist.BER += self.SizeOfWindow # przeklamane bity
-                masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
                 j += 1
                 
 
@@ -56,11 +55,90 @@ class Sender:
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
         print("Algorytm: SendFrameGoBackN")
-        pass
+
+        print(masterlist.data)
+        # maja byc pojedyncze ramki
+        listOfFrames = self.splitToFrames(masterlist.data)
+        print(listOfFrames)
+
+        # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
+        if self.typeOfCode == 1:
+            self.addCodeParity(listOfFrames)
+
+        if self.typeOfCode == 2:
+            self.addCodeMirroring(listOfFrames)
+
+        if self.typeOfCode == 3: 
+            self.addCodeCRC(listOfFrames)
+
+        print(listOfFrames)
+
+        # wysylanie wszystkich ramek 
+        result = 0
+        i = 0
+        j = 0
+        framecounter = 0
+        while True:
+            result = self.receiver.receiverFrameGoBackN(listOfFrames[framecounter:len(listOfFrames)], masterlist.propability, framecounter )
+            masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+
+            if framecounter != result:
+                masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
+                i += result-framecounter
+            if framecounter == result:
+                masterlist.BER += self.SizeOfWindow # przeklamane bity
+                j += 1
+            framecounter = result
+            if result == len(listOfFrames):
+                break
+
+        print("Szybkie wyniki: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
+
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
         print("Algorytm: SendFrameSelectiveRepeat")
-        pass
+
+        print(masterlist.data)
+        # maja byc pojedyncze ramki
+        listOfFrames = self.splitToFrames(masterlist.data)
+        print(listOfFrames)
+
+        # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
+        if self.typeOfCode == 1:
+            self.addCodeParity(listOfFrames)
+
+        if self.typeOfCode == 2:
+            self.addCodeMirroring(listOfFrames)
+
+        if self.typeOfCode == 3: 
+            self.addCodeCRC(listOfFrames)
+
+        print(listOfFrames)
+
+        # wysylanie wszystkich ramek 
+        confirmSend = []
+        for i in listOfFrames:
+            confirmSend.append(0)
+
+        # pierwsze sprawdzenie
+        print("Przed: ", listOfFrames)
+        self.receiver.receiverFrameSelectiveReapeat(listOfFrames, masterlist.propability, confirmSend)
+        
+        confirmSendNext = []
+        while True:
+            print(confirmSend)
+
+
+
+
+        # print("Szybkie wyniki: ")    
+        # print("Dobrze przeslane ramki: ", i)
+        # print("Żle przeslane ramki: ", j)
+        # print("Wszyskie przeslane ramki: ", i+j)
+        
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []

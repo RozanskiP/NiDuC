@@ -2,8 +2,6 @@ from ClassSender import Sender
 from ClassReceiver import Receiver
 from MasterList import MasterList
 
-from Coder import coderBit
-from Decoder import decodeBit
 from Generator import generateBit
 
 def main():
@@ -31,8 +29,8 @@ def main():
     # print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
     # propability = float(input(">>> "))
     SizeOfWindow = 9
-    chosenProtocol = 1
-    chosenCode = 3
+    chosenProtocol = 3
+    chosenCode = 1
     propability = 0.90
 
     receiver.typeOfCode = chosenCode
@@ -43,7 +41,7 @@ def main():
     # tutaj bedzie zdjęcie ładowane
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 1000 # do testowania mniejsza ilosc
+    SizeOfData = 40 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
 
     # zainicjalozowanie wartosci do glownego zbiornika na dane
