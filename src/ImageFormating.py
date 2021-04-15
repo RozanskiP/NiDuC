@@ -9,9 +9,11 @@ def ImgToBitArr(filename):
         BinH = bin(IntH) #wartosc binarna
         BinH = BinH.replace('0b', '') #wywalenie z 0b z poczatku ciagu
         BinList = list(BinH) #lista
+        BinList = list(map(int, BinList))
         return BinList
 
 def BitArrToImg(FileToWrite,bArr):
+    bArr = list(map(str, bArr))
     BitString = "".join(bArr)
     img = hex(int(BitString, 2)) #odrazu do hexa
     img = img.replace('0x','') #usniecie 0x z 0x(wartosc)
@@ -23,6 +25,4 @@ def BitArrToImg(FileToWrite,bArr):
     File.close()
 
 def TestImages(filename):
-    image = Image.open(filename)
-    print(ImgToBitArr(filename))
-    BitArrToImg("Result.png",ImgToBitArr(filename))
+    BitArrToImg("Result.jpg",ImgToBitArr(filename))
