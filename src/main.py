@@ -41,7 +41,7 @@ def main():
     # tutaj bedzie zdjęcie ładowane
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 40 # do testowania mniejsza ilosc
+    SizeOfData = 100 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
 
     # zainicjalozowanie wartosci do glownego zbiornika na dane

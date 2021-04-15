@@ -126,12 +126,31 @@ class Sender:
         # pierwsze sprawdzenie
         print("Przed: ", listOfFrames)
         self.receiver.receiverFrameSelectiveReapeat(listOfFrames, masterlist.propability, confirmSend)
+        print(confirmSend)
         
-        confirmSendNext = []
+        print("Petla:")
         while True:
-            print(confirmSend)
+            tempList = []
+            tempSender = []
+            for i in listOfFrames:
+                tempSender.append(0)
+            i = 0
+            for lists in listOfFrames:
+                if confirmSend[i] == -1:
+                    print("confirmSend")
+                    tempList.append(lists)
+                i += 1
+            print("Przed: ", listOfFrames)
+            self.receiver.receiverFrameSelectiveReapeat(tempList, masterlist.propability, tempSender)
+            for confirmy in tempSender:
+                if confirmy == -1:
+                    
+                    continue
+            break
 
+            
 
+        print(tempList)
 
 
         # print("Szybkie wyniki: ")    
