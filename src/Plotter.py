@@ -69,7 +69,6 @@ def ShowPlot(DataList):
     Protocol_Amount = len(np.unique(Protocol_Amount))
     Code_Amount = len(np.unique(Code_Amount))
 
-    print("Protocol: " + str(Protocol_Amount) + " Code: " + str(Code_Amount))
     #Teraz trzeba zebrac E i BER z kazdego przypadku
     for obj in DataList:
         BER_List.append(obj.BER)
