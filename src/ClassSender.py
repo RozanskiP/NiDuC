@@ -13,7 +13,7 @@ class Sender:
         pass
 
     def sendFrameStopAndWait(self, masterlist): # wysylanie ramki za pomoca algorytmu stop and wait
-        print("Algorytm: sendFrameStopAndWait")
+        print("Algorytm: SendFrameStopAndWait")
 
         print(masterlist.data)
         # maja byc pojedyncze ramki
@@ -32,25 +32,34 @@ class Sender:
 
         print(listOfFrames)
 
-
+        # wysylanie ramek po koleji     
         # sizeOfFrames
-        for list in  listOfFrames:
-            receiver.receiverFrameStopAndWait()
+        i = 0
+        j = 0
+        for lists in listOfFrames:
+            while True:
+                result = self.receiver.receiverFrameStopAndWait(lists, masterlist.propability)
+                masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+                if result == True:
+                    i += 1
+                    masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
+                    break
+                masterlist.BER += self.SizeOfWindow # przeklamane bity
+                masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+                j += 1
+                
 
-        # tablica potwierdzonych ramek zrobic
-
-        # podanie wartosci do odbieracza
-
-        #wysylanie ramek po koleji
-
-        pass
+        print("Szybkie wyniki: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
-        print("Algorytm: sendFrameGoBackN")
+        print("Algorytm: SendFrameGoBackN")
         pass
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
-        print("Algorytm: sendFrameSelectiveRepeat")
+        print("Algorytm: SendFrameSelectiveRepeat")
         pass
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity

@@ -3,7 +3,6 @@ from ClassReceiver import Receiver
 from MasterList import MasterList
 
 from Coder import coderBit
-from TransmisionCannal import transmision
 from Decoder import decodeBit
 from Generator import generateBit
 
@@ -12,39 +11,47 @@ def main():
     sender = Sender(receiver)
     receiver.setSender(sender)
 
-    print("Program do analizy alogorytmu ARQ")
-    SizeOfWindow = int(input("Podaj wielkosc ramki: "))
-    print("Size: ", SizeOfWindow )
+    # print("Program do analizy alogorytmu ARQ")
+    # SizeOfWindow = int(input("Podaj wielkosc ramki: "))
+    # print("Size: ", SizeOfWindow )
 
 
-    print("Podaj typ protokołu do przesyłania danych: ")
-    print("1 <- Stop and Wait")
-    print("2 <- Go Back N")
-    print("3 <- Selective Repeat")
-    chosenProtocol = int(input(">>> "))
+    # print("Podaj typ protokołu do przesyłania danych: ")
+    # print("1 <- Stop and Wait")
+    # print("2 <- Go Back N")
+    # print("3 <- Selective Repeat")
+    # chosenProtocol = int(input(">>> "))
 
-    print("Podaj sposob kodowania do przesyłania danych: ")
-    print("1 <- Kod Parzystosci")
-    print("2 <- Kod Dublowania")
-    print("3 <- Kod CRC32")
-    chosenCode = int(input(">>> "))
+    # print("Podaj sposob kodowania do przesyłania danych: ")
+    # print("1 <- Kod Parzystosci")
+    # print("2 <- Kod Dublowania")
+    # print("3 <- Kod CRC32")
+    # chosenCode = int(input(">>> "))
+
+    # print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
+    # propability = float(input(">>> "))
+    SizeOfWindow = 9
+    chosenProtocol = 1
+    chosenCode = 3
+    propability = 0.90
 
     receiver.typeOfCode = chosenCode
     receiver.typeOfProtocol = chosenProtocol
     sender.typeOfCode = chosenCode
     sender.typeOfProtocol = chosenProtocol
 
+    # tutaj bedzie zdjęcie ładowane
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 40 # do testowania mniejsza ilosc
+    SizeOfData = 1000 # do testowania mniejsza ilosc
     generateBit(Frames, SizeOfData)
 
-    # zainicjalozowanie wartossci do glownego zbiornika na dane
+    # zainicjalozowanie wartosci do glownego zbiornika na dane
     BER = 0
     E = 0
-    propability = 0
+    ReceivedBits = 0 
 
-    masterlist = MasterList(Frames, BER, E, SizeOfWindow, chosenProtocol, chosenCode, propability)
+    masterlist = MasterList(Frames, BER, E, ReceivedBits, SizeOfWindow, chosenProtocol, chosenCode, propability)
 
     receiver.SizeOfWindow = SizeOfWindow
     sender.SizeOfWindow = SizeOfWindow
