@@ -85,6 +85,7 @@ def ShowPlot(DataList):
     #dzieki temu mamy liste list
 
     Iter = 0
+    #Jest blad code_amount nie odpowiada protokolom ktore mogly byc dane. Do poprawy
     for pr in range(1, Protocol_Amount + 1): #protokół
         for c in range(1, Code_Amount + 1): #Kod
             #[1,0,1] poniewaz wykresom nie robi to roznicy co tam jest
