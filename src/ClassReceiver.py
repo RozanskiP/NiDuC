@@ -100,7 +100,6 @@ class Receiver:
         # dodawanie bledu przy transmisji
         for one in allFrame:
             self.generateNoise(one, propability)
-        print("Po   : ", allFrame)
         j = 0
         for oneframe in allFrame:
             codeToCompere = []

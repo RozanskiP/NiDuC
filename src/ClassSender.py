@@ -1,5 +1,6 @@
 from Generator import generateBit
 import zlib # kod CRC32
+import copy
 
 class Sender:
     receiver = None
@@ -124,40 +125,45 @@ class Sender:
             confirmSend.append(0)
 
         # pierwsze sprawdzenie
-        print("Przed: ", listOfFrames)
-        self.receiver.receiverFrameSelectiveReapeat(listOfFrames, masterlist.propability, confirmSend)
-        print(confirmSend)
-        
-        print("Petla:")
+        i = 0
+        j = 0
         while True:
-            tempList = []
-            tempSender = []
-            for i in listOfFrames:
-                tempSender.append(0)
-            i = 0
-            for lists in listOfFrames:
-                if confirmSend[i] == -1:
-                    print("confirmSend")
-                    tempList.append(lists)
-                i += 1
-            print("Przed: ", listOfFrames)
-            self.receiver.receiverFrameSelectiveReapeat(tempList, masterlist.propability, tempSender)
-            for confirmy in tempSender:
-                if confirmy == -1:
-                    
-                    continue
-            break
+            self.receiver.receiverFrameSelectiveReapeat(listOfFrames, masterlist.propability, confirmSend)
+            # print("RAMKI@@@@@@@@@: ", confirmSend)
+            index = None
+            try:
+                index = confirmSend.index(-1)
+            except:
+                pass
+            if index == None:
+                i += len(confirmSend)
+                masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
+                masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+                break
+            else:
+                templist = []
+                tempsend = []
+                k = 0
+                for lists in listOfFrames:
+                    if confirmSend[k] == -1:
+                        j += 1
+                        masterlist.BER += self.SizeOfWindow # przeklamane bity
+                        masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+                        templist.append(lists)
+                    else:
+                        masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
+                        masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
+                        i += 1
+                    k += 1
+                confirmSend = copy.deepcopy(tempsend)
+                listOfFrames = copy.deepcopy(templist)
+                for ni in listOfFrames:
+                    confirmSend.append(0)
 
-            
-
-        print(tempList)
-
-
-        # print("Szybkie wyniki: ")    
-        # print("Dobrze przeslane ramki: ", i)
-        # print("Żle przeslane ramki: ", j)
-        # print("Wszyskie przeslane ramki: ", i+j)
-        
+        print("Szybkie wyniki: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []
