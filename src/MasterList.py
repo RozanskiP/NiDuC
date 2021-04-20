@@ -11,6 +11,7 @@ class MasterList:
     propability = 0 # prawdopodobienstwo
     time = 0 # czas
 
+
     def __init__(self, data, BER, E, ReceivedBits, SizeOfWindow, typeOfProtocol, typeOfCode, propability, time):
         self.data = data
         self.BER = BER
