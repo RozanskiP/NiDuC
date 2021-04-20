@@ -77,15 +77,19 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
     receiver.SizeOfWindow = SizeOfWindow
     sender.SizeOfWindow = SizeOfWindow
     if chosenProtocol == 1:
+        startTime = time.time()
         sender.sendFrameStopAndWait(masterlist)
-        
+        masterlist.time = time.time() - startTime
 
     if chosenProtocol == 2:
+        startTime = time.time()
         sender.sendFrameGoBackN(masterlist)
-
+        masterlist.time = time.time() - startTime
 
     if chosenProtocol == 3:
+        startTime = time.time()
         sender.sendFrameSelectiveRepeat(masterlist)
+        masterlist.time = time.time() - startTime
 
     if Photo == 0:
         DataList.append(masterlist) 
@@ -110,15 +114,15 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
 
 if __name__ == "__main__":
     #main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
-    for WinSize in range(4): #Długosc ramki/okna
+    for WinSize in range(2): #Długosc ramki/okna
         for pr in range(1,4): #protokół
             for c in range(1,4): #Kod
-                for p in range(6): #Prawdopodobienstwo
-                   #main(pr,c,p,WinSize,0)
+                for p in range(2): #Prawdopodobienstwo
+                   main(pr,c,p,WinSize,0)
                    pass
 
-    main(1,1,5,4,1) #Mielenie zdjecia
-    ShowResultImage() #Pokazanie zdjecia po "Mielonce"
+    # main(1,1,5,4,1) #Mielenie zdjecia
+    # ShowResultImage() #Pokazanie zdjecia po "Mielonce"
 
     #ShowPlot(DataList)  #!!!! odpalac tylko jesli main jest W forach lub jest pojedynczy
 

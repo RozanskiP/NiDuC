@@ -9,8 +9,9 @@ class MasterList:
     typeOfProtocol = 0
     typeOfCode = 0
     propability = 0 # prawdopodobienstwo
+    time = 0
 
-    def __init__(self, data, BER, E, ReceivedBits, SizeOfWindow, typeOfProtocol, typeOfCode, propability):
+    def __init__(self, data, BER, E, ReceivedBits, SizeOfWindow, typeOfProtocol, typeOfCode, propability, time):
         self.data = data
         self.BER = BER
         self.E = E
@@ -19,3 +20,4 @@ class MasterList:
         self.typeOfProtocol = typeOfProtocol
         self.typeOfCode = typeOfCode
         self.propability = propability
+        self.time = time
