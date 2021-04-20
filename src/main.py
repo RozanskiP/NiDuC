@@ -8,7 +8,7 @@ from Generator import generateBit
 from ImageFormating import ImgToBitArr
 from ImageFormating import BitArrToImg
 from ImageFormating import ShowResultImage
-from Plotter import ShowPlot
+# from Plotter import ShowPlot
 
 DataList = []
 
@@ -36,10 +36,10 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
     # print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
     # propability = float(input(">>> "))
-    SizeOfWindow = 9
-    chosenProtocol = 3
-    chosenCode = 3
-    propability = 0.80
+    SizeOfWindow = 4
+    chosenProtocol = 1
+    chosenCode = 1
+    propability = 0.99
     # chosenProtocol = Protocol_ID
     # chosenCode = Code_ID
 
@@ -103,11 +103,11 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
     # sender.sendFrameStopAndWait(Frames)
 
 if __name__ == "__main__":
-    # main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
-    for pr in range(1,4): #protokół
-        for c in range(1,4): #Kod
-            for p in range(2):#Prawdopodobienstwo
-               main(pr,c,p,0)
+    main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
+    # for pr in range(1,4): #protokół
+    #     for c in range(1,4): #Kod
+    #         for p in range(2):#Prawdopodobienstwo
+            #    main(pr,c,p,0)
             #    pass
     #main(1,3,3,1) #Mielenie zdjecia
     #ShowResultImage() #Pokazanie zdjecia po "Mielonce"

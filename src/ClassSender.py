@@ -53,6 +53,9 @@ class Sender:
         print("Dobrze przeslane ramki: ", i)
         print("Żle przeslane ramki: ", j)
         print("Wszyskie przeslane ramki: ", i+j)
+        print("masterlist.E: ", masterlist.E)
+        print("masterlist.BER: ", masterlist.BER)
+        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
         print("Algorytm: SendFrameGoBackN")
@@ -97,6 +100,9 @@ class Sender:
         print("Dobrze przeslane ramki: ", i)
         print("Żle przeslane ramki: ", j)
         print("Wszyskie przeslane ramki: ", i+j)
+        print("masterlist.E: ", masterlist.E)
+        print("masterlist.BER: ", masterlist.BER)
+        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
 
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
@@ -164,6 +170,9 @@ class Sender:
         print("Dobrze przeslane ramki: ", i)
         print("Żle przeslane ramki: ", j)
         print("Wszyskie przeslane ramki: ", i+j)
+        print("masterlist.E: ", masterlist.E)
+        print("masterlist.BER: ", masterlist.BER)
+        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []
