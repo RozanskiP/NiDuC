@@ -115,7 +115,7 @@ if __name__ == "__main__":
         for pr in range(1,4): #protokół
             for c in range(1,4): #Kod
                 for p in range(2): #Prawdopodobienstwo
-                   main(pr,c,p,WinSize,0)
+                   main(pr,c,2,WinSize,0)
                    pass
 
     # main(1,1,5,4,1) #Mielenie zdjecia

@@ -18,10 +18,8 @@ class Sender:
         startTime = time.time()
         print("Algorytm: SendFrameStopAndWait")
 
-        print(masterlist.data)
         # maja byc pojedyncze ramki
         listOfFrames = self.splitToFrames(masterlist.data)
-        print(listOfFrames)
 
         # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
         if self.typeOfCode == 1:
@@ -33,7 +31,6 @@ class Sender:
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
 
-        print(listOfFrames)
 
         # wysylanie ramek po koleji     
         # sizeOfFrames
@@ -51,23 +48,21 @@ class Sender:
                 j += 1
         masterlist.time = round(time.time() - startTime, 6)
 
-        print("Szybkie wyniki: ")    
-        print("Dobrze przeslane ramki: ", i)
-        print("Żle przeslane ramki: ", j)
-        print("Wszyskie przeslane ramki: ", i+j)
-        print("masterlist.E: ", masterlist.E)
-        print("masterlist.BER: ", masterlist.BER)
-        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        print("Czas : ", masterlist.time)
+        # print("Szybkie wyniki: ")    
+        # print("Dobrze przeslane ramki: ", i)
+        # print("Żle przeslane ramki: ", j)
+        # print("Wszyskie przeslane ramki: ", i+j)
+        # print("masterlist.E: ", masterlist.E)
+        # print("masterlist.BER: ", masterlist.BER)
+        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        # print("Czas : ", masterlist.time)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
         startTime = time.time()
         print("Algorytm: SendFrameGoBackN")
 
-        print(masterlist.data)
         # maja byc pojedyncze ramki
         listOfFrames = self.splitToFrames(masterlist.data)
-        print(listOfFrames)
 
         # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
         if self.typeOfCode == 1:
@@ -78,8 +73,6 @@ class Sender:
 
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
-
-        print(listOfFrames)
 
         # wysylanie wszystkich ramek 
         result = 0
@@ -101,24 +94,22 @@ class Sender:
                 break
         masterlist.time = round(time.time() - startTime, 6)
 
-        print("Szybkie wyniki: ")    
-        print("Dobrze przeslane ramki: ", i)
-        print("Żle przeslane ramki: ", j)
-        print("Wszyskie przeslane ramki: ", i+j)
-        print("masterlist.E: ", masterlist.E)
-        print("masterlist.BER: ", masterlist.BER)
-        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        print("Czas : ", masterlist.time)
+        # print("Szybkie wyniki: ")    
+        # print("Dobrze przeslane ramki: ", i)
+        # print("Żle przeslane ramki: ", j)
+        # print("Wszyskie przeslane ramki: ", i+j)
+        # print("masterlist.E: ", masterlist.E)
+        # print("masterlist.BER: ", masterlist.BER)
+        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        # print("Czas : ", masterlist.time)
 
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
         startTime = time.time()
         print("Algorytm: SendFrameSelectiveRepeat")
 
-        print(masterlist.data)
         # maja byc pojedyncze ramki
         listOfFrames = self.splitToFrames(masterlist.data)
-        print(listOfFrames)
 
         # pogrupuj w ramki i dodaj kod parzystosci dla kazdej
         if self.typeOfCode == 1:
@@ -130,8 +121,6 @@ class Sender:
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
 
-        print(listOfFrames)
-
         # wysylanie wszystkich ramek 
         confirmSend = []
         for i in listOfFrames:
@@ -142,7 +131,6 @@ class Sender:
         j = 0
         while True:
             self.receiver.receiverFrameSelectiveReapeat(listOfFrames, masterlist.propability, confirmSend)
-            # print("RAMKI@@@@@@@@@: ", confirmSend)
             index = None
             try:
                 index = confirmSend.index(-1)
@@ -174,14 +162,14 @@ class Sender:
                     confirmSend.append(0)
         masterlist.time = round(time.time() - startTime, 6)
 
-        print("Szybkie wyniki: ")    
-        print("Dobrze przeslane ramki: ", i)
-        print("Żle przeslane ramki: ", j)
-        print("Wszyskie przeslane ramki: ", i+j)
-        print("masterlist.E: ", masterlist.E)
-        print("masterlist.BER: ", masterlist.BER)
-        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        print("Czas : ", masterlist.time)
+        # print("Szybkie wyniki: ")    
+        # print("Dobrze przeslane ramki: ", i)
+        # print("Żle przeslane ramki: ", j)
+        # print("Wszyskie przeslane ramki: ", i+j)
+        # print("masterlist.E: ", masterlist.E)
+        # print("masterlist.BER: ", masterlist.BER)
+        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        # print("Czas : ", masterlist.time)
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []

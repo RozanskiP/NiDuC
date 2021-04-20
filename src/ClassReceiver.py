@@ -34,7 +34,7 @@ class Receiver:
         frame = []
         frame = copy.deepcopy(framecome)
         # dodawanie bledu przy transmisji
-        self.generateNoise(frame, propability)
+        # self.generateNoise(frame, propability)
 
 
         # wybor kodu ktory byl dodawany jaka powinna byc jego wartosc
