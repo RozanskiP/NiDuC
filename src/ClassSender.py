@@ -1,6 +1,7 @@
 from Generator import generateBit
 import zlib # kod CRC32
 import copy
+import time
 
 class Sender:
     receiver = None
@@ -14,6 +15,7 @@ class Sender:
         pass
 
     def sendFrameStopAndWait(self, masterlist): # wysylanie ramki za pomoca algorytmu stop and wait
+        startTime = time.time()
         print("Algorytm: SendFrameStopAndWait")
 
         print(masterlist.data)
@@ -47,7 +49,7 @@ class Sender:
                     break
                 masterlist.BER += self.SizeOfWindow # przeklamane bity
                 j += 1
-                
+        masterlist.time = round(time.time() - startTime, 6)
 
         print("Szybkie wyniki: ")    
         print("Dobrze przeslane ramki: ", i)
@@ -56,8 +58,10 @@ class Sender:
         print("masterlist.E: ", masterlist.E)
         print("masterlist.BER: ", masterlist.BER)
         print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        print("Czas : ", masterlist.time)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
+        startTime = time.time()
         print("Algorytm: SendFrameGoBackN")
 
         print(masterlist.data)
@@ -95,6 +99,7 @@ class Sender:
             framecounter = result
             if result == len(listOfFrames):
                 break
+        masterlist.time = round(time.time() - startTime, 6)
 
         print("Szybkie wyniki: ")    
         print("Dobrze przeslane ramki: ", i)
@@ -103,9 +108,11 @@ class Sender:
         print("masterlist.E: ", masterlist.E)
         print("masterlist.BER: ", masterlist.BER)
         print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        print("Czas : ", masterlist.time)
 
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
+        startTime = time.time()
         print("Algorytm: SendFrameSelectiveRepeat")
 
         print(masterlist.data)
@@ -165,6 +172,7 @@ class Sender:
                 listOfFrames = copy.deepcopy(templist)
                 for ni in listOfFrames:
                     confirmSend.append(0)
+        masterlist.time = round(time.time() - startTime, 6)
 
         print("Szybkie wyniki: ")    
         print("Dobrze przeslane ramki: ", i)
@@ -173,6 +181,7 @@ class Sender:
         print("masterlist.E: ", masterlist.E)
         print("masterlist.BER: ", masterlist.BER)
         print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        print("Czas : ", masterlist.time)
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []

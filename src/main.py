@@ -1,7 +1,6 @@
 from ClassSender import Sender
 from ClassReceiver import Receiver
 from MasterList import MasterList
-import time
 
 from Generator import generateBit
 
@@ -36,7 +35,7 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
     # print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
     # propability = float(input(">>> "))
-    SizeOfWindow = 4
+    SizeOfWindow = 5
     chosenProtocol = 1
     chosenCode = 1
     propability = 0.99
@@ -71,9 +70,10 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
     # zainicjalozowanie wartosci do glownego zbiornika na dane
     BER = 0
     E = 0
-    ReceivedBits = 0 
+    ReceivedBits = 0
+    time = 0
 
-    masterlist = MasterList(Frames, BER, E, ReceivedBits, SizeOfWindow, chosenProtocol, chosenCode, propability)
+    masterlist = MasterList(Frames, BER, E, ReceivedBits, SizeOfWindow, chosenProtocol, chosenCode, propability, time)
 
     receiver.SizeOfWindow = SizeOfWindow
     sender.SizeOfWindow = SizeOfWindow
@@ -84,12 +84,9 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
     if chosenProtocol == 2:
         sender.sendFrameGoBackN(masterlist)
-
-
+        
     if chosenProtocol == 3:
-        startTime = time.time()
         sender.sendFrameSelectiveRepeat(masterlist)
-        print("Czas dzialania: %s sekund " % (time.time() - startTime))
 
     if Photo == 0:
         DataList.append(masterlist) 
