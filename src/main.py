@@ -1,8 +1,9 @@
 from ClassSender import Sender
 from ClassReceiver import Receiver
 from MasterList import MasterList
-import time
 
+from Coder import coderBit
+from Decoder import decodeBit
 from Generator import generateBit
 
 from ImageFormating import ImgToBitArr
@@ -12,7 +13,7 @@ from Plotter import ShowPlot
 
 DataList = []
 
-def main(Protocol_ID ,Code_ID, Probability ,Photo):
+def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
     receiver = Receiver()
     sender = Sender(receiver)
     receiver.setSender(sender)
@@ -36,15 +37,13 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
     # print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
     # propability = float(input(">>> "))
-    SizeOfWindow = 9
-    chosenProtocol = 3
-    chosenCode = 3
-    propability = 0.80
-    # chosenProtocol = Protocol_ID
-    # chosenCode = Code_ID
+    WinSizeList = [2, 4, 8 , 16, 33]
+    SizeOfWindow = WinSizeList[WindowSize]
+    chosenProtocol = Protocol_ID
+    chosenCode = Code_ID
 
-    # ProbabilityList = [1.0, 0.99 , 0.95 , 0.90]
-    # propability = ProbabilityList[Probability]
+    ProbabilityList = [1.0, 0.99 , 0.98 , 0.97, 0.96, 0.50]
+    propability = ProbabilityList[Probability]
     #propability = 0.90
 
     receiver.typeOfCode = chosenCode
@@ -55,18 +54,18 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
     # tutaj bedzie zdjęcie ładowane
     Frames = []
     SizeOfData = 8192 # zmienic na wczytywanie danych ze zdjecia
-    SizeOfData = 100 # do testowania mniejsza ilosc
-    generateBit(Frames, SizeOfData)
+    SizeOfData = 256 # do testowania mniejsza ilosc
 
     #mozna by wywalic if i elif jesli generacje bitów byłaby przed main()
     #a sama lista bitów wchodziła do maina(BitList, Protocol_ID ,Code_ID, Probability ,Photo) jako argument
     #wtedy tez wybór zdjecia byłby przed mainem a nie w mainie ale to chyba nie robi roznicy
     #komentarze usunac po zrobienniu decyzji
-    # if Photo == 0:
-    #     generateBit(Frames, SizeOfData)
+    FileName = r"FLAGA4.jpg"
+    if Photo == 0:
+        generateBit(Frames, SizeOfData)
 
-    # elif Photo == 1:
-    #     Frames = ImgToBitArr(r"FLAGA.jpg")
+    elif Photo == 1:
+        Frames = ImgToBitArr(FileName)
 
     # zainicjalozowanie wartosci do glownego zbiornika na dane
     BER = 0
@@ -77,7 +76,6 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
     receiver.SizeOfWindow = SizeOfWindow
     sender.SizeOfWindow = SizeOfWindow
-
     if chosenProtocol == 1:
         sender.sendFrameStopAndWait(masterlist)
         
@@ -87,9 +85,7 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
 
 
     if chosenProtocol == 3:
-        startTime = time.time()
         sender.sendFrameSelectiveRepeat(masterlist)
-        print("Czas dzialania: %s sekund " % (time.time() - startTime))
 
     if Photo == 0:
         DataList.append(masterlist) 
@@ -102,17 +98,29 @@ def main(Protocol_ID ,Code_ID, Probability ,Photo):
     # generateBit(Frames, SizeOfData)
     # sender.sendFrameStopAndWait(Frames)
 
-if __name__ == "__main__":
-    # main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
-    for pr in range(1,4): #protokół
-        for c in range(1,4): #Kod
-            for p in range(2):#Prawdopodobienstwo
-               main(pr,c,p,0)
-            #    pass
-    #main(1,3,3,1) #Mielenie zdjecia
-    #ShowResultImage() #Pokazanie zdjecia po "Mielonce"
+    # print(bits)
+    # # listofbits = coderBit(bits, n)                                                     
+    # print("List of list: ")
+    # print(listofbits)
 
-    # ShowPlot(DataList)  #!!!! odpalac tylko jesli main jest W forach lub jest pojedynczy
+    # transmision(listofbits, 0.3) # minimalnie 0.001 (1 promil) im mniej tym bardziej zmienia
+    # print(listofbits)
+
+    # decodeBit(listofbits, n)
+
+if __name__ == "__main__":
+    #main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
+    for WinSize in range(4): #Długosc ramki/okna
+        for pr in range(1,4): #protokół
+            for c in range(1,4): #Kod
+                for p in range(6): #Prawdopodobienstwo
+                   #main(pr,c,p,WinSize,0)
+                   pass
+
+    main(1,1,5,4,1) #Mielenie zdjecia
+    ShowResultImage() #Pokazanie zdjecia po "Mielonce"
+
+    #ShowPlot(DataList)  #!!!! odpalac tylko jesli main jest W forach lub jest pojedynczy
 
     #powstaje error przy gaszeniu okna z wykresami bo niby jak okno sie odpali z innego modułu niż tym gdzie jest __main__ (chyba)
     #Fix przyjdzie szybko

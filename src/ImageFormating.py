@@ -1,6 +1,6 @@
 from PIL import Image
 import base64
-
+from TransmisionCannal import transmision
 def ImgToBitArr(filename):
     with open(filename, "rb") as img: #read byte
         hexs = base64.b16encode(img.read()) #hex w byte b`(wartosc)`
@@ -13,6 +13,15 @@ def ImgToBitArr(filename):
         return BinList
 
 def BitArrToImg(FileToWrite,bArr):
+    print(len(bArr))
+    #bArr = transmision(bArr[3999:4000], 0.99)
+    #print(bArr)
+    for j in range(5):
+        for i in range(10):
+            bArr[15000+i+100*j] = 0
+            bArr[20000+i+100*j] = 0
+            bArr[40000+i+100*j] = 0
+            bArr[50000+i+100*j] = 0
     bArr = list(map(str, bArr)) #zmiana na liste stringów
     BitString = "".join(bArr) #zmiana listy na jeden ciag znaków
     img = hex(int(BitString, 2)) #ciag binarny do hexa

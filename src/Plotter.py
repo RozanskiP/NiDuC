@@ -6,7 +6,7 @@ import matplotlib
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.ticker as mtick
-
+from pathlib import Path
 
 #to do list
 #horizontal image merge dla łaczenia zdjec przed i po 
@@ -305,15 +305,11 @@ def ShowPlot(DataList):
         Protocol_ID_List.append(obj.typeOfProtocol)
         Code_ID_List.append(obj.typeOfCode)
         WindowSize.append(obj.SizeOfWindow)
-        
-        if len(obj.data)==0:
-            BER_List.append(obj.BER/float(len(obj.data)))
-        else:
-            BER_List.append(obj.BER/float(len(obj.data)))   
-        if obj.ReceivedBits==0:
-            E_List.append(obj.E/(obj.ReceivedBits+1))
-        else:
-            E_List.append(obj.E/(obj.ReceivedBits))
+        BER_List.append(obj.BER/float(len(obj.data)))   
+        E_List.append(obj.E/(obj.ReceivedBits))
+
+        print("test recived - data")
+        print(str(obj.ReceivedBits - len(obj.data)) + " P: " + str(obj.typeOfProtocol) +" C: " + str(obj.typeOfCode))
 
     Protocol_Amount = len(np.unique(Protocol_ID_List))
     Code_Amount = len(np.unique(Code_ID_List))
@@ -404,6 +400,10 @@ def ShowPlot(DataList):
         VerticalImgMerge(im1, im2, "AllFigs.png")
 
         print("Wykresy wygenerowane...")
+
+        File = Path("Result.jpg")
+        if File.is_file():
+            print("Istnieje")
 
     else:
         print("Narazie program dla innych opcji sie wysypie Module: Plotter")
