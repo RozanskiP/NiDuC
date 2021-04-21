@@ -7,10 +7,10 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.ticker as mtick
 from pathlib import Path
-
+import time
 #to do list
 #horizontal image merge dla łaczenia zdjec przed i po 
-
+#time
 def VerticalImgMerge(im1 ,im2, ResultImgName): #master PNG
     Final = Image.new('RGB', (im1.width, im1.height + im2.height))
     Final.paste(im1, (0, 0))  
@@ -61,7 +61,7 @@ def AddTextToImg(Content,TargetName, xPos, FontSize):
         d.text((xPos,0), Content, font=fnt, fill=(0,0,0))
         VerticalImgMerge(im1, im2, TargetName)
 
-def DrawSubPlots(DataList, FigNameList ,WinSize_Amount ,nCol, nRow, BaseName, type ):
+def DrawSubPlots(DataList, FigNameList ,WinSize_Amount ,nCol, nRow, BaseName, type, time ):
     Protocol_Names = ["NULL", "Stop and wait", "Go back n","Selective Repeat"] 
     Code_Names = ["NULL", "Kod parzystości", "Kod dublowania", "CRC32"]
 
@@ -73,8 +73,13 @@ def DrawSubPlots(DataList, FigNameList ,WinSize_Amount ,nCol, nRow, BaseName, ty
     for WinSize in range(WinSize_Amount):        
         fig, axes = plt.subplots(ncols=nCol, nrows=nRow, figsize=(20,20))
         for ax in axes.flatten():
-            ax.plot(DataList[i].propability, DataList[i].E, label="E")
-            ax.plot(DataList[i].propability, DataList[i].BER,  label="BER")
+            if time == 0:
+                ax.plot(DataList[i].propability, DataList[i].E, label="E")
+                ax.plot(DataList[i].propability, DataList[i].BER,  label="BER")
+                ax.set_ylabel('Współczynnik:')   
+            elif time == 1:
+                ax.plot(DataList[i].propability, DataList[i].time, label = "czas")
+                ax.set_ylabel('Czas [s]:')   
             ax.legend()
             if type == 0:
                 ax.set_title(Protocol_Names[DataList[i].typeOfProtocol] + " || " + Code_Names[DataList[i].typeOfCode] + " || " + "Długośc ramki "+ str(DataList[i].SizeOfWindow))
@@ -89,7 +94,6 @@ def DrawSubPlots(DataList, FigNameList ,WinSize_Amount ,nCol, nRow, BaseName, ty
             if type == 5:
                 ax.set_title("Srednie wartosci dla: " + "Długośc ramki "+ str(DataList[i].SizeOfWindow) )
             ax.set_xlabel(r"Prawodopodobieństwo błedu [%]")
-            ax.set_ylabel('Współczynnik:')   
             i += 1
         plt.savefig(BaseName + str(WinSize) +".png")
         FigNameList.append(Image.open(BaseName + str(WinSize) +".png"))
@@ -111,7 +115,6 @@ def AverageFromList(List1):
     FinalList = []
     SubListLen = len(List1[0])
     ListLen = len(List1)
-
     for i in range(SubListLen):
         total = 0
         for j in range(ListLen):
@@ -127,6 +130,9 @@ def ChopList(DataList, ChopBy): #srednia gdzie size of window nie ma znaczenia
     E_List1 = []
     E_List2 = []
     E_List3 = []
+    Time_List1 = []
+    Time_List2 = []
+    Time_List3 = []
     WinSizeList = []
     x = []
 
@@ -138,28 +144,34 @@ def ChopList(DataList, ChopBy): #srednia gdzie size of window nie ma znaczenia
             if obj.typeOfProtocol == 1:
                 BER_List1.append(obj.BER)
                 E_List1.append(obj.E)
+                Time_List1.append(obj.time)
 
             if obj.typeOfProtocol == 2:
                 BER_List2.append(obj.BER)
                 E_List2.append(obj.E)
+                Time_List2.append(obj.time)
 
             if obj.typeOfProtocol == 3:
                 BER_List3.append(obj.BER)
                 E_List3.append(obj.E)
+                Time_List3.append(obj.time)
 
     if ChopBy == 1: #Code
         for obj in DataList:
              if obj.typeOfCode == 1:
                 BER_List1.append(obj.BER)
                 E_List1.append(obj.E)
+                Time_List1.append(obj.time)
 
              if obj.typeOfCode == 2:
                 BER_List2.append(obj.BER)
                 E_List2.append(obj.E)
+                Time_List2.append(obj.time)
 
              if obj.typeOfCode == 3:
                 BER_List3.append(obj.BER)
                 E_List3.append(obj.E)
+                Time_List3.append(obj.time)
 
     if ChopBy == 2: #WinsSize
         WinSize = DataList[0].SizeOfWindow
@@ -168,20 +180,24 @@ def ChopList(DataList, ChopBy): #srednia gdzie size of window nie ma znaczenia
             if WinSize == DataList[i].SizeOfWindow:
                 BER_List1.append(DataList[i].BER)
                 E_List1.append(DataList[i].E)
+                Time_List1.append(DataList[i].time)
                 i += 1
             else:
                 BER = AverageFromList(BER_List1) # z jakiejs przyczyny BER_List1 = AverageFromList(BER_List1) nie dziala
                 E = AverageFromList(E_List1) #
-                x.append(MasterList([1,0,1], BER, E, [1,0,1], DataList[i-1].SizeOfWindow, 0, 0, Probability_List))
+                Time = AverageFromList(Time_List1)
+                x.append(MasterList([1,0,1], BER, E, [1,0,1], DataList[i-1].SizeOfWindow, 0, 0, Probability_List, Time))
                 BER_List1.clear()
                 E_List1.clear()
+                Time_List1.clear()
                 if i < len(DataList) - 1: #inaczej blad wyskoczy przy koncu listy
                     WinSize = DataList[i+1].SizeOfWindow
 
         #ostatni element nie wejdzie w else
-        BER_List1 = AverageFromList(BER_List1)
-        E_List1 = AverageFromList(E_List1)
-        x.append(MasterList([1,0,1], BER_List1, E_List1, [1,0,1], DataList[i-1].SizeOfWindow, 0, 0, Probability_List))
+        BER = AverageFromList(BER_List1)
+        E = AverageFromList(E_List1)
+        Time = AverageFromList(Time_List1)
+        x.append(MasterList([1,0,1], BER, E, [1,0,1], DataList[i-1].SizeOfWindow, 0, 0, Probability_List, Time))
         #ShowListContents(x)
 
     if ChopBy < 2:
@@ -191,10 +207,13 @@ def ChopList(DataList, ChopBy): #srednia gdzie size of window nie ma znaczenia
         E_List1 = AverageFromList(E_List1)
         E_List2 = AverageFromList(E_List2)
         E_List3 = AverageFromList(E_List3)
-
-        x.append(MasterList([1,0,1], BER_List1, E_List1, [1,0,1], 0, 1, 1, Probability_List))
-        x.append(MasterList([1,0,1], BER_List2, E_List2, [1,0,1], 0, 2, 2, Probability_List))
-        x.append(MasterList([1,0,1], BER_List3, E_List3, [1,0,1], 0, 3, 3, Probability_List))
+        Time_List1 = AverageFromList(Time_List1)
+        Time_List2 = AverageFromList(Time_List2)
+        Time_List3 = AverageFromList(Time_List3)
+        #tutaj blad wywala
+        x.append(MasterList([1,0,1], BER_List1, E_List1, [1,0,1], 0, 1, 1, Probability_List, Time_List1))
+        x.append(MasterList([1,0,1], BER_List2, E_List2, [1,0,1], 0, 2, 2, Probability_List, Time_List2))
+        x.append(MasterList([1,0,1], BER_List3, E_List3, [1,0,1], 0, 3, 3, Probability_List, Time_List3))
 
     return x
 
@@ -205,6 +224,9 @@ def ChopListByWinSize(DataList, ChopBy):
     E_List1 = []
     E_List2 = []
     E_List3 = []
+    Time_List1 = []
+    Time_List2 = []
+    Time_List3 = []
     x = []
 
     Probability_List = DataList[0].propability
@@ -216,27 +238,34 @@ def ChopListByWinSize(DataList, ChopBy):
                 if DataList[i].typeOfProtocol == 1:
                     BER_List1.append(DataList[i].BER)
                     E_List1.append(DataList[i].E)
+                    Time_List1.append(DataList[i].time)
 
                 if DataList[i].typeOfProtocol == 2:
                     BER_List2.append(DataList[i].BER)
                     E_List2.append(DataList[i].E)
+                    Time_List2.append(DataList[i].time)
 
                 if DataList[i].typeOfProtocol == 3:
                     BER_List3.append(DataList[i].BER)
                     E_List3.append(DataList[i].E)
+                    Time_List3.append(DataList[i].time)
 
             if ChopBy == 1: #Code
                 if DataList[i].typeOfCode == 1:
                    BER_List1.append(DataList[i].BER)
                    E_List1.append(DataList[i].E)
+                   Time_List1.append(DataList[i].time)
 
                 if DataList[i].typeOfCode == 2:
                    BER_List2.append(DataList[i].BER)
                    E_List2.append(DataList[i].E)
+                   Time_List2.append(DataList[i].time)
 
                 if DataList[i].typeOfCode == 3:
                    BER_List3.append(DataList[i].BER)
                    E_List3.append(DataList[i].E)
+                   Time_List3.append(DataList[i].time)
+
             i += 1
         else:
             BER1 = AverageFromList(BER_List1)
@@ -245,15 +274,21 @@ def ChopListByWinSize(DataList, ChopBy):
             E1 = AverageFromList(E_List1)
             E2 = AverageFromList(E_List2)
             E3 = AverageFromList(E_List3)
-            x.append(MasterList([1,0,1], BER1, E1, [1,0,1], WinSize, 1, 1, Probability_List))
-            x.append(MasterList([1,0,1], BER2, E2, [1,0,1], WinSize, 2, 2, Probability_List))
-            x.append(MasterList([1,0,1], BER3, E3, [1,0,1], WinSize, 3, 3, Probability_List))
+            Time1 = AverageFromList(Time_List1)
+            Time2 = AverageFromList(Time_List2)
+            Time3 = AverageFromList(Time_List3)
+            x.append(MasterList([1,0,1], BER1, E1, [1,0,1], WinSize, 1, 1, Probability_List, Time1))
+            x.append(MasterList([1,0,1], BER2, E2, [1,0,1], WinSize, 2, 2, Probability_List, Time2))
+            x.append(MasterList([1,0,1], BER3, E3, [1,0,1], WinSize, 3, 3, Probability_List, Time3))
             BER_List1.clear()
             BER_List2.clear()
             BER_List3.clear()
             E_List1.clear()
             E_List2.clear()
             E_List3.clear()
+            Time_List1.clear()
+            Time_List2.clear()
+            Time_List3.clear()
             if i < len(DataList) - 1: #inaczej blad wyskoczy przy koncu listy
                 WinSize = DataList[i+1].SizeOfWindow
     #ostatnie dane dla ostatniej ramki nie wejda w else
@@ -263,9 +298,12 @@ def ChopListByWinSize(DataList, ChopBy):
     E1 = AverageFromList(E_List1)
     E2 = AverageFromList(E_List2)
     E3 = AverageFromList(E_List3)
-    x.append(MasterList([1,0,1], BER1, E1, [1,0,1], WinSize, 1, 1, Probability_List))
-    x.append(MasterList([1,0,1], BER2, E2, [1,0,1], WinSize, 2, 2, Probability_List))
-    x.append(MasterList([1,0,1], BER3, E3, [1,0,1], WinSize, 3, 3, Probability_List))
+    Time1 = AverageFromList(Time_List1)
+    Time2 = AverageFromList(Time_List2)
+    Time3 = AverageFromList(Time_List3)
+    x.append(MasterList([1,0,1], BER1, E1, [1,0,1], WinSize, 1, 1, Probability_List, Time1))
+    x.append(MasterList([1,0,1], BER2, E2, [1,0,1], WinSize, 2, 2, Probability_List, Time2))
+    x.append(MasterList([1,0,1], BER3, E3, [1,0,1], WinSize, 3, 3, Probability_List, Time3))
     return x
 
 def ShowListContents(DataList):
@@ -291,6 +329,8 @@ def ShowPlot(DataList):
     Final_E_List = []
     FinalDataList = []
     WindowSize = [] 
+    Time_List = []
+    Final_Time_List = []
 
     FigNameList =[]
     
@@ -307,9 +347,10 @@ def ShowPlot(DataList):
         WindowSize.append(obj.SizeOfWindow)
         BER_List.append(obj.BER/float(len(obj.data)))   
         E_List.append(obj.E/(obj.ReceivedBits))
+        Time_List.append(obj.time)
 
-        print("test recived - data")
-        print(str(obj.ReceivedBits - len(obj.data)) + " P: " + str(obj.typeOfProtocol) +" C: " + str(obj.typeOfCode))
+        #print("test recived - data")
+        #print(str(obj.ReceivedBits - len(obj.data)) + " P: " + str(obj.typeOfProtocol) +" C: " + str(obj.typeOfCode))
 
     Protocol_Amount = len(np.unique(Protocol_ID_List))
     Code_Amount = len(np.unique(Code_ID_List))
@@ -326,20 +367,17 @@ def ShowPlot(DataList):
     while last < len(BER_List):
         Final_BER_List.append(BER_List[int(last):int(last + avg)])
         Final_E_List.append(E_List[int(last):int(last + avg)])
+        Final_Time_List.append(Time_List[int(last):int(last + avg)])
         last += avg
     #dzieki temu mamy liste list
-    
     Iter = 0
     #Jest blad code_amount nie odpowiada protokolom ktore mogly byc dane. Do poprawy
     for WinSize in range(WinSize_Amount): #winsize
         for pr in range(Protocol_Amount): #protokół
             for c in range(Code_Amount): #Kod
                 #[1,0,1] poniewaz wykresom nie robi to roznicy co tam jest
-                FinalDataList.append(MasterList([1,0,1], Final_BER_List[Iter], Final_E_List[Iter], [1,0,1], WindowSize[WinSize], Protocol_ID_List[pr], Code_ID_List[c], Probability_List))
+                FinalDataList.append(MasterList([1,0,1], Final_BER_List[Iter], Final_E_List[Iter], [1,0,1], WindowSize[WinSize], Protocol_ID_List[pr], Code_ID_List[c], Probability_List, Final_Time_List[Iter]))
                 Iter +=1         
-    #iteracja Kodow i protokolow jest od 1 stad "NULL"
-    Protocol_Names = ["NULL", "Stop and wait", "Go back n","Selective Repeat"] 
-    Code_Names = ["NULL", "Kod parzystości", "Kod dublowania", "CRC32"]
 
     #dla łatwiejszego testowania poszczególnych opcji
     #Zeby nie trzeba bylo czekac az wszytkie fory sie zrobia
@@ -354,54 +392,103 @@ def ShowPlot(DataList):
         plt.show()
 
     if Protocol_Amount == Code_Amount and not (Protocol_Amount == 1 and Code_Amount == 1):
-        print("Generowanie PlotsPerParams 1/6")
-
-        DrawSubPlots(FinalDataList, FigNameList, WinSize_Amount, Protocol_Amount, Code_Amount, "PlotsPerParams" , 0)
+        startTime = time.time()
+        print("Generowanie PlotsPerParams 1/12")
+        DrawSubPlots(FinalDataList, FigNameList, WinSize_Amount, Protocol_Amount, Code_Amount, "PlotsPerParams" , 0, 0)
         CreateMergedPhotoVert(FigNameList, "AllFigs.png")
 
+        print("Generowanie PlotsPerParamsTime 2/12")
+        FigNameList = []
+        DrawSubPlots(FinalDataList, FigNameList, WinSize_Amount, Protocol_Amount, Code_Amount, "PlotPerParamsTime" , 0, 1)
+        CreateMergedPhotoVert(FigNameList, "AllFigsTime.png")
+
         AddTextToImg("Srednie wartosci dla protokolow dla danej wielkosci ramki","AllFigs.png", 300, 50)
-        print("Generowanie AvgPerProtByWinSize 2/6")
+        AddTextToImg("Srednie wartosci dla protokolow dla danej wielkosci ramki","AllFigsTime.png", 300, 50)
+
+        print("Generowanie AvgPerProtByWinSize 3/12")
         ChoppedList = ChopListByWinSize(FinalDataList, 0)
         FigNameList = []
-        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerProtByWinSize" , 1)
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerProtByWinSize" , 1, 0)
         MergeImagesVert(FigNameList, "AllFigs.png")
+
+        print("Generowanie AvgPerProtByWinSizeTime 4/12")
+        FigNameList = []
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerProtByWinSizeTime" , 1, 1)
+        MergeImagesVert(FigNameList, "AllFigsTime.png")
 
         AddTextToImg("Srednie wartosci dla kodow dla danej wielkosci ramki","AllFigs.png", 300, 50)
-        print("Generowanie AvgPerCodeByWinSize 3/6")
+        AddTextToImg("Srednie wartosci dla kodow dla danej wielkosci ramki","AllFigsTime.png", 300, 50)
+
+        print("Generowanie AvgPerCodeByWinSize 5/12")
         ChoppedList = ChopListByWinSize(FinalDataList, 1)
         FigNameList = []
-        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerCodeByWinSize" , 2)
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerCodeByWinSize" , 2, 0)
         MergeImagesVert(FigNameList, "AllFigs.png")
 
-        AddTextToImg("Srednie wartosci dla poszczegolnych opcji","AllFigs.png", 500, 50)
+        print("Generowanie AvgPerCodeByWinSizeTime 6/12")
+        FigNameList= []
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, 3, "AvgPerCodeByWinSizeTime" , 2, 1)
+        MergeImagesVert(FigNameList, "AllFigsTime.png")
 
-        print("Generowanie AvgPerProt 4/6")
+        AddTextToImg("Srednie wartosci dla poszczegolnych opcji","AllFigs.png", 500, 50)
+        AddTextToImg("Srednie wartosci dla poszczegolnych opcji","AllFigsTime.png", 500, 50)
+
+        print("Generowanie AvgPerProt 7/12")
         ChoppedList = ChopList(FinalDataList, 0)
+
         FigNameList = []
-        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Protocol_Amount, "AvgPerProt" , 3)
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Protocol_Amount, "AvgPerProt" , 3, 0)
         im1 = Image.open("AllFigs.png")
         im2 = FigNameList[0]
         VerticalImgMerge(im1, im2, "AllFigs.png")
 
-        print("Generowanie AvgPerCode 5/6")
+        print("Generowanie AvgPerProtTime 8/12")
+        FigNameList = []
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Protocol_Amount, "AvgPerProtTime" , 3, 1)
+        im1 = Image.open("AllFigsTime.png")
+        im2 = FigNameList[0]
+        VerticalImgMerge(im1, im2, "AllFigsTime.png")
+
+
+        print("Generowanie AvgPerCode 9/12")
         ChoppedList = ChopList(FinalDataList, 1)
         FigNameList = []
-        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Code_Amount, "AvgPerCode" , 4)
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Code_Amount, "AvgPerCode" , 4, 0)
         im1 = Image.open("AllFigs.png")
         im2 = FigNameList[0]
         VerticalImgMerge(im1, im2, "AllFigs.png")
 
-        print("Generowanie AvgPerWs 6/6")
+        print("Generowanie AvgPerCodeTime 10/12")
+        FigNameList = []
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, Code_Amount, "AvgPerCodeTime" , 4, 1)
+        im1 = Image.open("AllFigsTime.png")
+        im2 = FigNameList[0]
+        VerticalImgMerge(im1, im2, "AllFigsTime.png")
+
+        print("Generowanie AvgPerWs 11/12")
         ChoppedList = ChopList(FinalDataList, 2)
         FigNameList = []
-        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, WinSize_Amount, "AvgPerWinSize" , 5)
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, WinSize_Amount, "AvgPerWinSize" , 5, 0)
         im1 = Image.open("AllFigs.png")
         im2 = FigNameList[0]
         VerticalImgMerge(im1, im2, "AllFigs.png")
 
-        print("Wykresy wygenerowane...")
+        print("Generowanie AvgPerWs 12/12")
+        FigNameList = []
+        DrawSubPlots(ChoppedList, FigNameList, WinSize_Amount, 1, WinSize_Amount, "AvgPerWinSize" , 5, 1)
+        im1 = Image.open("AllFigsTime.png")
+        im2 = FigNameList[0]
+        VerticalImgMerge(im1, im2, "AllFigsTime.png")
 
-        File = Path("Result.jpg")
+        round(time.time() - startTime, 6)
+        print("Wykresy wygenerowane w " + str(round(time.time() - startTime, 6)) + "sekund")
+
+        print("Laczenie wszytkiego w AllDataMerged.png")
+        im1 = Image.open("AllFigs.png")
+        im2 = Image.open("AllFigsTime.png")
+        HorizontalImgMerge(im1, im2, "AllDataMerged.png")
+
+        File = Path("Result.jpg") #dla laczenie zdjec przed i po
         if File.is_file():
             print("Istnieje")
 
