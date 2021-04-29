@@ -1,6 +1,7 @@
 from ClassSender import Sender
 from ClassReceiver import Receiver
 from MasterList import MasterList
+from TransmisionCannal import Transmision
 
 from Coder import coderBit
 from Decoder import decodeBit
@@ -13,10 +14,11 @@ from ImageFormating import ShowResultImage
 
 DataList = []
 
-def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
+def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo, Transmision_ID):
     receiver = Receiver()
     sender = Sender(receiver)
-    receiver.setSender(sender)
+    transmision = Transmision()
+    receiver.setSender(sender, transmision)
 
     # print("Program do analizy alogorytmu ARQ")
     # SizeOfWindow = int(input("Podaj wielkosc ramki: "))
@@ -49,6 +51,7 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
 
     receiver.typeOfCode = chosenCode
     receiver.typeOfProtocol = chosenProtocol
+    receiver.typeOfTransmision = Transmision_ID
     sender.typeOfCode = chosenCode
     sender.typeOfProtocol = chosenProtocol
 
@@ -74,7 +77,7 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
     ReceivedBits = 0
     time = 0
 
-    masterlist = MasterList(Frames, BER, E, ReceivedBits, SizeOfWindow, chosenProtocol, chosenCode, propability, time)
+    masterlist = MasterList(Frames, BER, E, ReceivedBits, SizeOfWindow, chosenProtocol, chosenCode, propability, time, Transmision_ID)
 
     receiver.SizeOfWindow = SizeOfWindow
     sender.SizeOfWindow = SizeOfWindow
@@ -83,7 +86,6 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
 
     if chosenProtocol == 2:
         sender.sendFrameGoBackN(masterlist)
-
 
     if chosenProtocol == 3:
         sender.sendFrameSelectiveRepeat(masterlist)
@@ -111,12 +113,12 @@ def main(Protocol_ID ,Code_ID, Probability ,WindowSize ,Photo):
 
 if __name__ == "__main__":
     #main(1,3,3,0) #tak by wygladał main który zastałem przed edycją
-    for WinSize in range(2): #Długosc ramki/okna
-        for pr in range(1,4): #protokół
-            for c in range(1,4): #Kod
-                for p in range(2): #Prawdopodobienstwo
-                   main(pr,c,2,WinSize,0)
-                   pass
+    for trans in range(1,4):
+        for WinSize in range(2): #Długosc ramki/okna
+            for pr in range(1,4): #protokół
+                for c in range(1,4): #Kod
+                    for p in range(2): #Prawdopodobienstwo
+                        main(pr,c,2,WinSize,0,trans)
 
     # main(1,1,5,4,1) #Mielenie zdjecia
     # ShowResultImage() #Pokazanie zdjecia po "Mielonce"

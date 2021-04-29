@@ -7,12 +7,13 @@ class MasterList:
     ReceivedBits = 0 # wszyskie proby przeslania danych do obliczen
     SizeOfWindow = 0 # wielkosc okna
     typeOfProtocol = 0
+    typeOfTransmision = 0
     typeOfCode = 0
     propability = 0 # prawdopodobienstwo
     time = 0 # czas
 
 
-    def __init__(self, data, BER, E, ReceivedBits, SizeOfWindow, typeOfProtocol, typeOfCode, propability, time):
+    def __init__(self, data, BER, E, ReceivedBits, SizeOfWindow, typeOfProtocol, typeOfCode, propability, time, typeOfTransmision):
         self.data = data
         self.BER = BER
         self.E = E
@@ -22,3 +23,4 @@ class MasterList:
         self.typeOfCode = typeOfCode
         self.propability = propability
         self.time = time
+        self.typeOfTransmision = typeOfTransmision

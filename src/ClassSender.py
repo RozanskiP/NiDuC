@@ -48,14 +48,14 @@ class Sender:
                 j += 1
         masterlist.time = round(time.time() - startTime, 6)
 
-        # print("Szybkie wyniki: ")    
-        # print("Dobrze przeslane ramki: ", i)
-        # print("Żle przeslane ramki: ", j)
-        # print("Wszyskie przeslane ramki: ", i+j)
-        # print("masterlist.E: ", masterlist.E)
-        # print("masterlist.BER: ", masterlist.BER)
-        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        # print("Czas : ", masterlist.time)
+        print("Szybkie wyniki: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
+        print("masterlist.E: ", masterlist.E)
+        print("masterlist.BER: ", masterlist.BER)
+        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
+        print("Czas : ", masterlist.time)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
         startTime = time.time()

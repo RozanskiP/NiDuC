@@ -7,6 +7,8 @@ class Receiver:
     SizeOfWindow = 0
     typeOfProtocol = 0
     typeOfCode = 0
+    transmision = None
+    typeOfTransmision = 0
     
     def __init__(self):
         pass
@@ -14,8 +16,9 @@ class Receiver:
     def showResults(self): # wyswietlenie wyniku, liczby ramek, pozytywanie i negatywnie przeslanych i ponownie doslanych
         pass
 
-    def setSender(self, sender): # podanie wartosci sendera do odsylania bledow i proszenia o poprawke
+    def setSender(self, sender, transmision): # podanie wartosci sendera do odsylania bledow i proszenia o poprawke
         self.sender = sender
+        self.transmision = transmision
 
     def generateNoise(self, framen, p): # generowanie szumu/zakłóceń
         # print("Generowanie zakłocen: ")
@@ -34,8 +37,12 @@ class Receiver:
         frame = []
         frame = copy.deepcopy(framecome)
         # dodawanie bledu przy transmisji
-        # self.generateNoise(frame, propability)
-
+        if self.typeOfTransmision == 1:
+            self.transmision.BSC(frame, propability)
+        if self.typeOfTransmision == 2:
+            self.transmision.BEC(frame, propability)
+        if self.typeOfTransmision == 3:
+            self.transmision.GilbertModel(frame, propability)
 
         # wybor kodu ktory byl dodawany jaka powinna byc jego wartosc
         codeToCompere = []
@@ -67,7 +74,12 @@ class Receiver:
         allFrame = copy.deepcopy(framecome)
         # dodawanie bledu przy transmisji
         for one in allFrame:
-            self.generateNoise(one, propability)
+            if self.typeOfTransmision == 1:
+                self.transmision.BSC(one, propability)
+            if self.typeOfTransmision == 2:
+                self.transmision.BEC(one, propability)
+            if self.typeOfTransmision == 3:
+                self.transmision.GilbertModel(one, propability)
 
         # wybor kodu ktory byl dodawany jaka powinna byc jego wartosc a nastepne okreslenie
         #  wartosc od ktorej nalezy jeszcze raz przeslac
@@ -99,7 +111,13 @@ class Receiver:
         allFrame = copy.deepcopy(framecome)
         # dodawanie bledu przy transmisji
         for one in allFrame:
-            self.generateNoise(one, propability)
+            if self.typeOfTransmision == 1:
+                self.transmision.BSC(one, propability)
+            if self.typeOfTransmision == 2:
+                self.transmision.BEC(one, propability)
+            if self.typeOfTransmision == 3:
+                self.transmision.GilbertModel(one, propability)
+
         j = 0
         for oneframe in allFrame:
             codeToCompere = []
