@@ -223,3 +223,6 @@ class Sender:
                 listint.append(int(i)) 
             for i in listint:
                 lists.append(i)
+
+    def addCodeEthereum():
+        pass

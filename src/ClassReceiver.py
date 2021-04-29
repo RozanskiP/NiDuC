@@ -169,3 +169,6 @@ class Receiver:
         for i in listhex:
             AddedCode.append(int(i)) 
         return AddedCode
+    
+    def CodeEthereum():
+        pass
