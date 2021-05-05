@@ -170,5 +170,16 @@ class Receiver:
             AddedCode.append(int(i)) 
         return AddedCode
     
-    def CodeEthereum():
+    def CodeSHA256(self, frame):
+        strlist = [str(i) for i in frame]
+        res = str(int("".join(strlist)))
+        listhash = hashlib.sha256(res.encode('utf-8')).hexdigest()
+        binaryhash = bin(int(listhash, 16))[2:].zfill(8)
+        hexsstr = str(binaryhash)
+        AddedCode = []
+        for i in hexsstr:
+            AddedCode.append(int(i))
+        return AddedCode
+
+    def CodeEthereum(self, frames):
         pass

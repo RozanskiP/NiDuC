@@ -207,7 +207,6 @@ class Sender:
             for bits in temp:
                 lists.append(bits)
 
-
     def addCodeCRC(self, frames): # Kod CRC na koncu 32 bity
         print("KOD CRC32")
         for lists in frames:
@@ -224,5 +223,17 @@ class Sender:
             for i in listint:
                 lists.append(i)
 
-    def addCodeEthereum():
+    def CodeSHA256(self, frames):
+        print("KOD SHA256")
+        for lists in frames:
+            strlist = [str(i) for i in lists]
+            res = str(int("".join(strlist)))
+            listhash = hashlib.sha256(res.encode('utf-8')).hexdigest()
+            binaryhash = bin(int(listhash, 16))[2:].zfill(8)
+            hexsstr = str(binaryhash)
+            for i in hexsstr:
+                lists.append(int(i))
+
+
+    def addCodeEthereum(self, frames):
         pass
