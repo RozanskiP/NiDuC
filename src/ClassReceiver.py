@@ -54,11 +54,13 @@ class Receiver:
 
         if self.typeOfCode == 3: 
             codeToCompere = self.CodeCRC(frame[0:self.SizeOfWindow])
+        
+        if self.typeOfCode == 4:
+            codeToCompere = self.CodeSHA256(oneframe[0:self.SizeOfWindow])
 
         # porownanie naszej ramki
         # odpowiedznie czy ma byc ponowiona czy jest zaakceptowana 
         # jesli jest zaakceptowana to true jesli nie to false
-        print("Porównuje!")
         i = 0
         for bits in codeToCompere:
             index = self.SizeOfWindow + i
@@ -93,8 +95,12 @@ class Receiver:
             if self.typeOfCode == 2:
                 codeToCompere = self.CodeMirroring(oneframe[0:self.SizeOfWindow])
 
-            if self.typeOfCode == 3: 
+            if self.typeOfCode == 3:
                 codeToCompere = self.CodeCRC(oneframe[0:self.SizeOfWindow])
+
+            if self.typeOfCode == 4:
+                codeToCompere = self.CodeSHA256(oneframe[0:self.SizeOfWindow])
+
             i = 0
             for bits in codeToCompere:
                 index = self.SizeOfWindow + i
@@ -129,6 +135,10 @@ class Receiver:
 
             if self.typeOfCode == 3: 
                 codeToCompere = self.CodeCRC(oneframe[0:self.SizeOfWindow])
+
+            if self.typeOfCode == 4:
+                codeToCompere = self.CodeSHA256(oneframe[0:self.SizeOfWindow])
+
             i = 0
             for bits in codeToCompere:
                 index = self.SizeOfWindow + i

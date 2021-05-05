@@ -31,6 +31,8 @@ class Sender:
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
 
+        if self.typeOfCode == 4: 
+            self.addCodeSHA256(listOfFrames)
 
         # wysylanie ramek po koleji     
         # sizeOfFrames
@@ -73,6 +75,9 @@ class Sender:
 
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
+
+        if self.typeOfCode == 4:
+            self.addCodeSHA256(listOfFrames)
 
         # wysylanie wszystkich ramek 
         result = 0
@@ -120,6 +125,9 @@ class Sender:
 
         if self.typeOfCode == 3: 
             self.addCodeCRC(listOfFrames)
+        
+        if self.typeOfCode == 4: 
+            self.addCodeSHA256(listOfFrames)
 
         # wysylanie wszystkich ramek 
         confirmSend = []
@@ -223,7 +231,7 @@ class Sender:
             for i in listint:
                 lists.append(i)
 
-    def CodeSHA256(self, frames):
+    def addCodeSHA256(self, frames):
         print("KOD SHA256")
         for lists in frames:
             strlist = [str(i) for i in lists]
