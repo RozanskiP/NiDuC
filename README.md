@@ -18,7 +18,7 @@ App for classes: Reliability and diagnostics of digital circuits
 * CRC32
 * SHA256
 
-## Programing language
+## Programming language
 * Python
 * Makefile
 
