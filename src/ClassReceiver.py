@@ -1,6 +1,7 @@
 from numpy import random
 import zlib # kod CRC32
 import copy
+import hashlib # kod SHA256
 
 class Receiver:
     sender = None
@@ -56,7 +57,7 @@ class Receiver:
             codeToCompere = self.CodeCRC(frame[0:self.SizeOfWindow])
         
         if self.typeOfCode == 4:
-            codeToCompere = self.CodeSHA256(oneframe[0:self.SizeOfWindow])
+            codeToCompere = self.CodeSHA256(frame[0:self.SizeOfWindow])
 
         # porownanie naszej ramki
         # odpowiedznie czy ma byc ponowiona czy jest zaakceptowana 

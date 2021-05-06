@@ -2,6 +2,7 @@ from Generator import generateBit
 import zlib # kod CRC32
 import copy
 import time
+import hashlib # kod SHA256
 
 class Sender:
     receiver = None
@@ -50,13 +51,10 @@ class Sender:
                 j += 1
         masterlist.time = round(time.time() - startTime, 6)
 
-        print("Szybkie wyniki: ")    
+        print("Wyniki podstawowe: ")    
         print("Dobrze przeslane ramki: ", i)
         print("Żle przeslane ramki: ", j)
         print("Wszyskie przeslane ramki: ", i+j)
-        print("masterlist.E: ", masterlist.E)
-        print("masterlist.BER: ", masterlist.BER)
-        print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
         print("Czas : ", masterlist.time)
 
     def sendFrameGoBackN(self, masterlist): # wysylanie ramki za pomoca algorytmu go back n
@@ -99,14 +97,11 @@ class Sender:
                 break
         masterlist.time = round(time.time() - startTime, 6)
 
-        # print("Szybkie wyniki: ")    
-        # print("Dobrze przeslane ramki: ", i)
-        # print("Żle przeslane ramki: ", j)
-        # print("Wszyskie przeslane ramki: ", i+j)
-        # print("masterlist.E: ", masterlist.E)
-        # print("masterlist.BER: ", masterlist.BER)
-        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        # print("Czas : ", masterlist.time)
+        print("Wyniki podstawowe: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
+        print("Czas : ", masterlist.time)
 
 
     def sendFrameSelectiveRepeat(self, masterlist): # wysylanie ramki za pomoca algorytmu selevtive reapeat
@@ -170,14 +165,11 @@ class Sender:
                     confirmSend.append(0)
         masterlist.time = round(time.time() - startTime, 6)
 
-        # print("Szybkie wyniki: ")    
-        # print("Dobrze przeslane ramki: ", i)
-        # print("Żle przeslane ramki: ", j)
-        # print("Wszyskie przeslane ramki: ", i+j)
-        # print("masterlist.E: ", masterlist.E)
-        # print("masterlist.BER: ", masterlist.BER)
-        # print("masterlist.ReceivedBits: ", masterlist.ReceivedBits)
-        # print("Czas : ", masterlist.time)
+        print("Wyniki podstawowe: ")    
+        print("Dobrze przeslane ramki: ", i)
+        print("Żle przeslane ramki: ", j)
+        print("Wszyskie przeslane ramki: ", i+j)
+        print("Czas : ", masterlist.time)
 
     def splitToFrames(self, masterlist): # obcina ostatnie bity
         listOfFrames = []
