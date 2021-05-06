@@ -7,12 +7,24 @@ App for classes: Reliability and diagnostics of digital circuits
 * Transmission channel
 * Decoder
 
+## Used protocols
+* Stop-And-Wait
+* Go-Back-N
+* Selective-Repeat
+
+## Used codes
+* Parity-Code
+* Mirroring-Code
+* CRC32
+* SHA256
 
 ## Programing language
 * Python
+* Makefile
 
 ## How to run
 * python3 main.py
+* make
 
 ## Author
 * Paweł Różański

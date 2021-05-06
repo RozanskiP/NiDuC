@@ -8,3 +8,7 @@ __pycache__
 TypeOfTransmision.txt
 
 testing.py
+
+__pycache__
+
+*.pyc
