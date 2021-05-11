@@ -85,7 +85,6 @@ class Sender:
         while True:
             result = self.receiver.receiverFrameGoBackN(listOfFrames[framecounter:len(listOfFrames)], masterlist.propability, framecounter )
             masterlist.ReceivedBits += self.SizeOfWindow # wszyskie bity
-
             if framecounter != result:
                 masterlist.E += self.SizeOfWindow # przeslane bity z powodzeniem
                 i += result-framecounter
@@ -231,9 +230,11 @@ class Sender:
             listhash = hashlib.sha256(res.encode('utf-8')).hexdigest()
             binaryhash = bin(int(listhash, 16))[2:].zfill(8)
             hexsstr = str(binaryhash)
+            listint = []
             for i in hexsstr:
-                lists.append(int(i))
-
+                listint.append(int(i))
+            for i in listint:
+                lists.append(i)
 
     def addCodeEthereum(self, frames):
         pass

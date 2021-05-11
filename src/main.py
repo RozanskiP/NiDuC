@@ -34,7 +34,7 @@ def main():
     print("1 <- Kod Parzystosci")
     print("2 <- Kod Dublowania")
     print("3 <- Kod CRC32")
-    print("3 <- Kod SHA256")
+    print("4 <- Kod SHA256")
     chosenCode = int(input(">>> "))
 
     print("Podaj prawdopodobienstwo przeklamac bitów w promilach: ")
@@ -47,11 +47,11 @@ def main():
     transmision_id = int(input(">>> "))
 
     
-    # SizeOfData = 100
-    # SizeOfWindow = 9
-    # chosenProtocol = 3
+    # SizeOfData = 1000
+    # SizeOfWindow = 16
+    # chosenProtocol = 2
     # chosenCode = 4
-    # propability = 0.99
+    # propability = 0.98
     # transmision_id = 3
 
     print("===================Zaczynam transmisje===================")
